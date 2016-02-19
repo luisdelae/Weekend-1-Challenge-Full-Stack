@@ -22,16 +22,23 @@ label {
 	margin-top: 5px;
 }
 
-#delButton {
-	margin-bottom: 5px;
-	margin-left: 5px
-}
-
-#container p {
-	padding-left: 5px;
-}
-
 .emp-div {
 	display: inline;
 	float: left;
+}
+
+li {
+	list-style: none;
+}
+
+.activeButton:hover {
+	color: #8b8b8b;
+}
+
+.inactive {
+	color: #8b8b8b;
+}
+
+button.inactive:hover {
+	color: black;
 }
