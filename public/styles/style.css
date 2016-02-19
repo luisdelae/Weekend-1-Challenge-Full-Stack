@@ -31,3 +31,7 @@ label {
 	padding-left: 5px;
 }
 
+.emp-div {
+	display: inline;
+	float: left;
+}

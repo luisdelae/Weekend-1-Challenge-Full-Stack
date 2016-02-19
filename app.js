@@ -24,12 +24,10 @@ app.get('/emp_info', function(req, res) {
     pg.connect(connectionString, function(err, client, done) {
         var query = client.query('SELECT * FROM emp_info');
 
-        //Stream results back one row at a time
         query.on('row', function(row) {
             results.push(row);
         });
 
-        //close connection
         query.on('end', function() {
             client.end();
             console.log(results);
@@ -43,22 +41,24 @@ app.get('/emp_info', function(req, res) {
     });
 });
 
-
-app.post('/people', function(req, res) {
+app.post('/emp_info', function(req, res) {
     var addPerson = {
-        first_name: req.body.first_name,
-        last_name: req.body.last_name
+        emp_id: req.body.emp_id,
+        emp_first_name: req.body.emp_first_name,
+        emp_last_name: req.body.emp_last_name,
+        emp_job_title: req.body.emp_job_title,
+        emp_salary: req.body.emp_salary
     };
     pg.connect(connectionString, function(err, client, done) {
-        client.query('INSERT INTO emp_info (emp_id, emp_first_name, emp_last_name, emp_job_title, emp_salary) VALUES ($1, $2) RETURNING person_id;',
-            [addPerson.first_name, addPerson.last_name],
+        client.query('INSERT INTO emp_info (emp_id, emp_first_name, emp_last_name, emp_job_title, emp_salary) ' +
+            'VALUES ($1, $2, $3, $4, $5) RETURNING emp_id;',
+            [addPerson.emp_id, addPerson.emp_first_name, addPerson.emp_last_name, addPerson.emp_job_title, addPerson.emp_salary],
             function(err, result) {
                 done(); //this is needed to end the connection so that we can bypass the 10 db connections max default
                 if(err) {
                     console.log('Error inserting data: ', err);
                     res.send(false);
                 } else {
-                    //console.log(res[0]['person_id']);
                     res.send(addPerson);
                 }
             });
