@@ -66,7 +66,21 @@ app.post('/emp_info', function(req, res) {
     });
 });
 
-app.put('/')
+app.post('/status_change', function(req, res) {
+    console.log(req.body);
+
+    pg.connect(connectionString, function(err, client, done) {
+       client.query('UPDATE emp_info SET emp_activity_status = false WHERE emp_id = ' + req.body.emp_id,
+       function(err, result) {
+           done();
+           if (err) {
+               res.send(false);
+           } else {
+               res.send(result);
+           }
+       })
+    });
+});
 
 app.get('/*', function(req, res) {
     var file = req.params[0] || '/views/index.html';

@@ -38,7 +38,7 @@ var appendEmpToDom = function(empInformation) {
 	var empJobTitle = empInformation.emp_job_title;
 	var empSalary = empInformation.emp_salary;
 
-	$('#employeeList').append('<div id="' + empID + '" class="emp-div"><ul><li>Employee ID: ' + empID +
+	$('#employeeList').append('<div id="' + empID + '" class="emp-div"><ul><li class="empID">Employee ID: ' + empID +
 		'</li><li>First Name: ' + empFirstName + '</li><li>Last Name: ' + empLastName +
 		'</li><li>Job Title: ' + empJobTitle + '</li><li class="salary">Salary: ' + empSalary + '</li>' +
 		'<li><button class="activeButton">Deactivate</button></li></ul></div>');
@@ -65,7 +65,7 @@ var appendEmpListOnLoad = function(empInformation) {
 
 				console.log(empActivityStatus);
 
-				$('#employeeList').append('<div id="' + empID + '" class="emp-div"><ul><li>Employee ID: ' + empID +
+				$('#employeeList').append('<div id="' + empID + '" class="emp-div"><ul><li class="empID">Employee ID: ' + empID +
 					'</li><li>First Name: ' + empFirstName + '</li><li>Last Name: ' + empLastName +
 					'</li><li>Job Title: ' + empJobTitle + '</li><li class="salary">Salary: ' + empSalary + '</li>' +
 					'<li><button class="activeButton">Deactivate</button></li></ul></div>');
@@ -81,15 +81,14 @@ var appendEmpListOnLoad = function(empInformation) {
 
 var toggleEmpActiveStatus = function() {
 	var $parentDiv = $(this).parent().parent().parent();
+	var thisEmpIDString = $parentDiv.find('.empID').text();
+	var thisEmpIDParsed = thisEmpIDString.split(' ');
+	var thisEmpID = thisEmpIDParsed[2];
 	var thisSalaryString = $parentDiv.find('.salary').text();
 	var thisSalaryParsed = thisSalaryString.split(' ');
 	var thisSalaryNum = parseFloat(thisSalaryParsed[1]);
 
-	console.log('this:: ' + $(this));
-	console.log('parent:: '+ $parentDiv);
-	console.log('salary string:: ' + thisSalaryString);
-	console.log('salary parsed:: ' + thisSalaryParsed);
-	console.log('salary num:: ', thisSalaryNum);
+	var testObj = {emp_id: parseInt(thisEmpID)};
 
 	if ($(this).hasClass('inactive') == false) {
 
@@ -97,12 +96,14 @@ var toggleEmpActiveStatus = function() {
 		//if it has active class, then send post request to server/DB to change the status to
 		//inactive once the button is pressed, then do all the other stuff.
 
-		//$.ajax({
-		//	type: 'PUT',
-		//	url: '/status_change',
-		//	data:
-        //
-		//});
+		$.ajax({
+			type: 'POST',
+			url: '/status_change',
+			data: testObj,
+			success: function() {
+				console.log("status change request success");
+			}
+		})
 		$(this).addClass('inactive');
 		$(this).text('Activate');
 		$parentDiv.addClass('inactive');
