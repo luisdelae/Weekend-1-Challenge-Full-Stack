@@ -124,7 +124,4 @@ var toggleEmpActiveStatus = function() {
 
 }
 
-
-
-//ask whether or not the app has to keep the active/inactive status through page reload.
-//if so, will have to add status column to db, query db for status and go from there.
+//Need to make the class of the div update on load as well depending on activity status returned by server.
