@@ -15,6 +15,8 @@ var submitEmployee = function() {
 		values[field.name] = field.value;
 	});
 
+	values.emp_activity_status = true;
+
 	$('#employeeForm').find('input[type=text]').val('');
 	$('#employeeForm').find('input[type=number]').val('');
 
@@ -38,7 +40,7 @@ var appendEmpToDom = function(empInformation) {
 
 	$('#employeeList').append('<div id="' + empID + '" class="emp-div"><ul><li>Employee ID: ' + empID +
 		'</li><li>First Name: ' + empFirstName + '</li><li>Last Name: ' + empLastName +
-		'</li><li>Job Title: ' + empJobTitle + '</li><li>Salary: ' + empSalary + '</li>' +
+		'</li><li>Job Title: ' + empJobTitle + '</li><li class="salary">Salary: ' + empSalary + '</li>' +
 		'<li><button class="activeButton">Deactivate</button></li></ul></div>');
 
 	totalSalary += parseFloat(empSalary);
@@ -59,6 +61,9 @@ var appendEmpListOnLoad = function(empInformation) {
 				var empLastName = empInformation.emp_last_name;
 				var empJobTitle = empInformation.emp_job_title;
 				var empSalary = empInformation.emp_salary;
+				var empActivityStatus = empInformation.emp_activity_status;
+
+				console.log(empActivityStatus);
 
 				$('#employeeList').append('<div id="' + empID + '" class="emp-div"><ul><li>Employee ID: ' + empID +
 					'</li><li>First Name: ' + empFirstName + '</li><li>Last Name: ' + empLastName +
@@ -87,6 +92,17 @@ var toggleEmpActiveStatus = function() {
 	console.log('salary num:: ', thisSalaryNum);
 
 	if ($(this).hasClass('inactive') == false) {
+
+		//check what class the button has assigned to it.
+		//if it has active class, then send post request to server/DB to change the status to
+		//inactive once the button is pressed, then do all the other stuff.
+
+		//$.ajax({
+		//	type: 'PUT',
+		//	url: '/status_change',
+		//	data:
+        //
+		//});
 		$(this).addClass('inactive');
 		$(this).text('Activate');
 		$parentDiv.addClass('inactive');
@@ -108,7 +124,6 @@ var toggleEmpActiveStatus = function() {
 }
 
 
-//when a new employee is added, it will not subtract, but still still add/remove the correct class.
-//It is not seeing the parent of the button and thus is unable to get the value. Why?
+
 //ask whether or not the app has to keep the active/inactive status through page reload.
 //if so, will have to add status column to db, query db for status and go from there.
